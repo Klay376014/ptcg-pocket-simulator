@@ -4,7 +4,7 @@
     <header class="p-4 border-b">
       <nav>
         <NuxtLink to="/">
-          <Button variant="outline">Index</Button>
+          <Button variant="outline">Draw Card</Button>
         </NuxtLink>
         <NuxtLink to="/second" class="ml-4">
           <Button variant="outline">Second Page</Button>
