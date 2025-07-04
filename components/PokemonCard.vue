@@ -19,7 +19,7 @@
       </CardContent>
       <CardFooter class="flex flex-col justify-center items-center">
         <p v-if="setInfo" class="mb-2">{{ setInfo.label.en }} - {{ packId }}</p>
-        <Button v-if="isLastCard" class="cursor-pointer" @click.stop="$emit('drawAgain')">
+        <Button v-if="isLastCard && !isMultiPackMidDraw" class="cursor-pointer" @click.stop="$emit('drawAgain')">
           Draw Again
         </Button>
       </CardFooter>
@@ -45,6 +45,7 @@ const props = defineProps<{
   card?: PokemonCardType
   packId?: string | null
   isLastCard?: boolean
+  isMultiPackMidDraw?: boolean
 }>()
 
 defineEmits(['drawAgain'])
