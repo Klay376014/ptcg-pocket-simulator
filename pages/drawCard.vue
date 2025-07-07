@@ -120,7 +120,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useCardsStore, type Card } from '~/store/cards'
+import type { Card } from '~/types'
 import { useSetsStore } from '~/store/sets'
 import PokemonCard from '~/components/PokemonCard.vue'
 import { Button } from '@/components/ui/button'
@@ -136,7 +136,6 @@ import {
 const drawnCards = ref<Card[]>([])
 const currentCardIndex = ref(0)
 const selectedPackId = ref<string | null>(null)
-const cardsStore = useCardsStore()
 const setsStore = useSetsStore()
 const isLoading = ref(false)
 
@@ -194,15 +193,16 @@ function preloadImages(urls: string[]): Promise<Array<void>> {
 }
 
 async function drawSinglePack(packId: string) {
-  const cardsInPack = cardsStore.cards.filter(c => c.packs?.includes(packId))
-  if (cardsInPack.length === 0) return []
-
-  const newCards: Card[] = []
-  for (let i = 0; i < 5; i++) {
-    const randomIndex = Math.floor(Math.random() * cardsInPack.length)
-    newCards.push(cardsInPack[randomIndex])
+  try {
+    const newCards = await $fetch('/api/draw', {
+      method: 'POST',
+      body: { packId }
+    })
+    return newCards as Card[]
+  } catch (error) {
+    console.error('Error fetching cards:', error)
+    return []
   }
-  return newCards
 }
 
 async function fetchCards(packId: string) {
@@ -218,6 +218,7 @@ async function fetchCards(packId: string) {
       
       // Update state after loading is complete
       drawnCards.value = newCards
+      currentCardIndex.value = 0
     }
   } catch (error) {
     console.error("Failed to preload card images", error)
