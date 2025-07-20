@@ -6,6 +6,10 @@
         <Switch id="multi-pack-mode" :model-value="isMultiPackMode" @update:model-value="toggleMultiPackMode" />
         <Label html-for="multi-pack-mode">五連抽模式</Label>
       </div>
+      <div class="flex items-center space-x-2">
+        <Switch id="fun-mode" :model-value="isFunMode" @update:model-value="toggleFunMode" />
+        <Label html-for="fun-mode">{{ isFunMode ? '歡樂模式' : '一般模式' }}</Label>
+      </div>
       <Accordion type="single" collapsible class="w-full">
         <AccordionItem v-for="(set) in filteredSets" :key="set.code" :value="set.code">
           <AccordionTrigger>{{ set.label.en }}</AccordionTrigger>
@@ -144,6 +148,9 @@ const isMultiPackMode = ref(false)
 const multiPackHistory = ref<Card[][]>([])
 const currentPackInMultiDraw = ref(0)
 
+// Fun mode state
+const isFunMode = ref(false)
+
 const card = computed(() => {
   if (drawnCards.value.length === 0) return null
   return drawnCards.value[currentCardIndex.value]
@@ -196,7 +203,7 @@ async function drawSinglePack(packId: string) {
   try {
     const newCards = await $fetch('/api/draw', {
       method: 'POST',
-      body: { packId }
+      body: { packId, useRarity: !isFunMode.value }
     })
     return newCards as Card[]
   } catch (error) {
@@ -266,6 +273,10 @@ function toggleMultiPackMode(checked: boolean) {
   drawnCards.value = []
   currentCardIndex.value = 0
   currentPackInMultiDraw.value = 0
+}
+
+function toggleFunMode(checked: boolean) {
+  isFunMode.value = checked
 }
 
 </script>

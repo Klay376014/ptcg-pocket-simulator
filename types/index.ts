@@ -10,3 +10,15 @@ export type Card = {
     }
     packs?: string[]
 }
+
+export type RarityWeight = {
+    rarityCode: string
+    weight: number // 權重 (如 50 = 50%)
+}
+
+export type PackRarityConfig = {
+    packId: string
+    normalRarityWeights: RarityWeight[]
+    fourthCardWeights: RarityWeight[]
+    fifthCardWeights: RarityWeight[]
+}

@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Card as PokemonCardType } from '~/store/cards'
+import type { Card as PokemonCardType } from '~/types'
 import { useSetsStore } from '~/store/sets'
 import { useRarityStore } from '~/store/rarity'
 import { Button } from '@/components/ui/button'
